@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+@theme {
+  --color-brand: #8d190a;
+  --color-ocean: #00354a;
+  --color-ink: #001f25;
+  --color-sand: #fff8f3;
+  --color-sand-dark: #f7ece1;
+  --color-line: #c0c7cd;
+  --color-sky: #a3eeff;
+  --color-sky-line: #76d4e7;
+  --color-teal: #006877;
+  --color-day-sidebar-bg: #fdf2e6;
+  --color-add-button-border: #71787d;
+  --color-nice-grey: #41484D;
+  --color-blue-tag: #C3E8FF;
+
+  --font-sans: "Roboto", ui-sans-serif, system-ui, sans-serif;
+  --font-hand: "Caveat", cursive;
+  --font-display: "Fredericka the Great", serif;
+  --font-title: "Epilogue";
+  --font-jakarta: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
