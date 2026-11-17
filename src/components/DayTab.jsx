@@ -6,16 +6,16 @@ export const DayTab = ({ children, isSelected, onSelect }) => {
       type="button"
       onClick={onSelect}
       aria-pressed={isSelected}
-      className={`m-2.5 py-2.5 flex flex-col items-center justify-center rounded-2xl cursor-pointer transition-colors
+      className={`mx-2.5 my-1.5 flex shrink-0 cursor-pointer flex-col items-center justify-center rounded-2xl py-2.5 transition-all duration-300 ease-smooth active:scale-95
         ${
           isSelected
-            ? " bg-brand text-white drop-shadow-xl"
-            : " text-ocean hover:bg-sand-dark active:scale-95"
+            ? "bg-linear-to-b from-brand to-sunset text-white shadow-lg shadow-brand/30"
+            : "text-ocean hover:-translate-y-0.5 hover:bg-white/70 hover:shadow-soft"
         }`}
     >
-      <CalendarIcon className="size-4 mb-2" />
+      <CalendarIcon className={`mb-1.5 size-4 ${isSelected ? "opacity-90" : "opacity-50"}`} />
       {children}
-      <div className="w-10 border border-b-white opacity-20 mt-2"></div>
+      <div className="mt-2 h-px w-8 bg-current opacity-20" />
     </button>
   );
 };

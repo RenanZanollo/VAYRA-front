@@ -3,16 +3,22 @@ import { MapContainer, TileLayer, Marker, Tooltip, useMap } from "react-leaflet"
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
+// Pin normal: cresce um pouco no hover
 const pinIcon = L.divIcon({
   className: "",
-  html: '<div class="size-4 rounded-full border-2 border-white bg-brand shadow-md"></div>',
+  html: '<div class="size-4 rounded-full border-2 border-white bg-brand shadow-md transition-transform duration-200 hover:scale-125"></div>',
   iconSize: [16, 16],
   iconAnchor: [8, 8],
 });
 
+// Pin selecionado: gradiente + uma "onda" pulsando atrás (animate-ping)
 const selectedPinIcon = L.divIcon({
   className: "",
-  html: '<div class="size-7 rounded-full border-4 border-white bg-brand shadow-lg ring-4 ring-brand/30"></div>',
+  html: `
+    <div class="relative size-7">
+      <span class="absolute inset-0 animate-ping rounded-full bg-brand/40"></span>
+      <div class="relative size-7 rounded-full border-4 border-white bg-linear-to-br from-brand to-sunset shadow-lg"></div>
+    </div>`,
   iconSize: [28, 28],
   iconAnchor: [14, 14],
 });

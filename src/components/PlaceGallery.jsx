@@ -1,4 +1,8 @@
 import { useEffect, useRef } from "react";
+import { PinIcon } from "./icons.jsx";
+
+const arrowClass =
+  "flex size-8 cursor-pointer items-center justify-center rounded-full border border-line/70 bg-white text-lg leading-none text-ocean shadow-soft transition-all duration-200 hover:border-brand hover:text-brand active:scale-90";
 
 export const PlaceGallery = ({ place }) => {
   const scrollerRef = useRef(null);
@@ -14,17 +18,27 @@ export const PlaceGallery = ({ place }) => {
 
   if (!place) {
     return (
-      <div className="flex h-full items-center justify-center text-sm text-nice-grey">
-        Clique em um lugar da agenda ou do mapa para ver as fotos.
+      <div className="flex h-full p-4">
+        <div className="flex flex-1 animate-fade-in flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-line/70 text-center">
+          <span className="flex size-10 items-center justify-center rounded-full bg-brand/10">
+            <PinIcon className="size-5 text-brand" />
+          </span>
+          <p className="font-jakarta text-sm font-semibold text-ocean">Nenhum lugar selecionado</p>
+          <p className="text-xs text-nice-grey">
+            Clique em um lugar da agenda ou do mapa para ver as fotos.
+          </p>
+        </div>
       </div>
     );
   }
 
   if (place.photos.length === 0) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-1 text-nice-grey">
-        <span className="font-bold text-ocean">{place.name}</span>
-        <span className="text-sm">Ainda sem fotos deste lugar.</span>
+      <div className="flex h-full p-4">
+        <div className="flex flex-1 animate-fade-in flex-col items-center justify-center gap-1 rounded-2xl border-2 border-dashed border-line/70">
+          <span className="font-jakarta font-bold text-ocean">{place.name}</span>
+          <span className="text-sm text-nice-grey">Ainda sem fotos deste lugar.</span>
+        </div>
       </div>
     );
   }
@@ -32,24 +46,46 @@ export const PlaceGallery = ({ place }) => {
   return (
     <div className="flex h-full flex-col gap-3 p-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-bold uppercase text-ocean">
-          Galeria do local selecionado: <span className="normal-case">{place.name}</span>
+        <h2 className="flex items-center gap-2 font-jakarta text-xs font-bold tracking-wide text-ocean uppercase">
+          <PinIcon className="size-3.5 text-brand" />
+          Galeria do local selecionado:
+          <span className="rounded-md bg-sand-dark px-2 py-0.5 tracking-normal normal-case">
+            {place.name}
+          </span>
         </h2>
 
-        <div className="flex items-center gap-2 text-sm text-nice-grey">
-          <span>{place.photos.length} fotos</span>
-          <button type="button" onClick={() => scroll(-1)} aria-label="Fotos anteriores"
-            className="size-7 rounded-full border border-line hover:bg-sand-dark">‹</button>
-          <button type="button" onClick={() => scroll(1)} aria-label="Próximas fotos"
-            className="size-7 rounded-full border border-line hover:bg-sand-dark">›</button>
+        <div className="flex items-center gap-2 text-xs text-nice-grey">
+          <span className="mr-1">{place.photos.length} fotos</span>
+          <button type="button" onClick={() => scroll(-1)} aria-label="Fotos anteriores" className={arrowClass}>
+            ‹
+          </button>
+          <button type="button" onClick={() => scroll(1)} aria-label="Próximas fotos" className={arrowClass}>
+            ›
+          </button>
         </div>
       </div>
 
-      <div ref={scrollerRef} className="no-scrollbar flex min-h-0 flex-1 snap-x snap-mandatory gap-3 overflow-x-auto">
-        {place.photos.map((photo) => (
-          <figure key={photo.url} className="relative h-full w-56 shrink-0 snap-start overflow-hidden rounded-xl">
-            <img src={photo.url} alt={photo.caption} loading="lazy" className="h-full w-full object-cover" />
-            <figcaption className="absolute bottom-2 left-2 rounded-md bg-black/50 px-2 py-0.5 text-xs text-white">
+      {/* key={place._id}: ao trocar de lugar, a lista é recriada e anima de novo */}
+      <div
+        key={place._id}
+        ref={scrollerRef}
+        className="no-scrollbar flex min-h-0 flex-1 snap-x snap-mandatory gap-3 overflow-x-auto"
+      >
+        {place.photos.map((photo, index) => (
+          <figure
+            key={photo.url}
+            style={{ animationDelay: `${index * 50}ms` }}
+            className="group relative h-full w-56 shrink-0 animate-fade-up snap-start overflow-hidden rounded-xl bg-sand-dark shadow-card"
+          >
+            <img
+              src={photo.url}
+              alt={photo.caption}
+              loading="lazy"
+              className="h-full w-full object-cover transition-transform duration-700 ease-smooth group-hover:scale-105"
+            />
+            {/* degradê escuro embaixo: a legenda fica legível em qualquer foto */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/60 to-transparent" />
+            <figcaption className="absolute bottom-2 left-2.5 text-xs font-semibold text-white drop-shadow">
               {photo.caption}
             </figcaption>
           </figure>

@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand: #8d190a;
+  --color-brand: #D4475A;
+  --color-sunset: #F68F42; /* segunda cor do gradiente (brand → sunset) */
   --color-ocean: #00354a;
   --color-ink: #001f25;
   --color-sand: #fff8f3;
@@ -18,8 +19,76 @@
   --font-sans: "Roboto", ui-sans-serif, system-ui, sans-serif;
   --font-hand: "Caveat", cursive;
   --font-display: "Fredericka the Great", serif;
-  --font-title: "Epilogue";
+  --font-title: "Epilogue", ui-sans-serif, system-ui, sans-serif;
   --font-jakarta: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  /*
+    Sombras "tingidas" com o azul ocean em vez de preto puro.
+    Sombra preta deixa tudo com cara de sujo/duro; sombra levemente
+    colorida e em camadas (uma curta + uma longa) parece mais natural.
+    Viram as classes: shadow-soft, shadow-card, shadow-lift
+  */
+  --shadow-soft: 0 1px 2px rgb(0 53 74 / 0.05), 0 2px 8px rgb(0 53 74 / 0.05);
+  --shadow-card: 0 1px 2px rgb(0 53 74 / 0.06), 0 4px 14px rgb(0 53 74 / 0.06);
+  --shadow-lift: 0 2px 4px rgb(0 53 74 / 0.06), 0 12px 28px rgb(0 53 74 / 0.12);
+
+  /* Curva de easing "suave no final": deixa as transições menos robóticas */
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Animações: viram as classes animate-fade-up e animate-fade-in */
+  --animate-fade-up: fade-up 0.45s var(--ease-smooth) both;
+  --animate-fade-in: fade-in 0.35s ease-out both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-sand text-ink antialiased;
+  }
+
+  ::selection {
+    @apply bg-brand/20;
+  }
+
+  /* Anel de foco visível só pra quem navega no teclado */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand;
+  }
+
+  /* Barra de rolagem fina e discreta nas áreas que rolam */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(0 53 74 / 0.2) transparent;
+  }
+
+  /* Respeita quem pediu "reduzir movimento" no sistema */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
 
 @utility no-scrollbar {
@@ -28,4 +97,50 @@
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+/*
+  Borda com gradiente reutilizável (pra elementos cujo conteúdo NÃO cobre o fundo).
+  Truque: dois fundos empilhados. O de cima pinta só até o padding (o "miolo"),
+  o de baixo pinta até a borda. Como a borda é transparente, o gradiente aparece nela.
+  Uso: class="border-2 border-gradient rounded-2xl"
+*/
+@utility border-gradient {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--color-sand), var(--color-sand)) padding-box,
+    linear-gradient(135deg, var(--color-brand), var(--color-sunset)) border-box;
+}
+
+/* ---------- Ajustes visuais do Leaflet ---------- */
+
+.leaflet-container {
+  font-family: var(--font-jakarta);
+  background: var(--color-sand-dark);
+}
+
+.leaflet-tooltip {
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.6rem;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--color-ocean);
+  box-shadow: var(--shadow-card);
+}
+
+.leaflet-bar {
+  border: none !important;
+  border-radius: 0.75rem !important;
+  overflow: hidden;
+  box-shadow: var(--shadow-card) !important;
+}
+
+.leaflet-bar a {
+  color: var(--color-ocean) !important;
+  transition: background-color 0.15s;
+}
+
+.leaflet-bar a:hover {
+  background-color: var(--color-sand-dark) !important;
 }

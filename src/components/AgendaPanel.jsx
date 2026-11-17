@@ -10,28 +10,32 @@ export const AgendaPanel = ({ selectedDate, selectedPlaceId, onSelectPlace }) =>
   const daySchedules = schedules.filter((item) => item.date === selectedDate);
 
   return (
-    <div className="flex-1 min-h-0 overflow-y-auto">
-      <div className="flex flex-col justify-center items-start">
-        <p className="mt-6 ml-3 font-hand font-bold text-3xl text-brand first-letter:uppercase">
+    // key={selectedDate}: quando o dia muda, o React recria este bloco
+    // e as animações de entrada rodam de novo.
+    <div key={selectedDate} className="min-h-0 flex-1 overflow-y-auto px-4 pb-4">
+      <div className="animate-fade-up pt-6">
+        <p className="font-hand text-3xl font-bold text-brand first-letter:uppercase">
           {formatLongDate(selectedDate)}
         </p>
-        <h2 className="font-title my-1 ml-3 font-bold text-ocean text-2xl">
+        <h2 className="my-1 font-title text-2xl font-bold tracking-tight text-ocean">
           {day.title}
         </h2>
-        <span className="flex justify-center items-center ml-3">
-          <UmbrelaIcon className="size-4 text-teal mr-1" />
-          <p className="text-nice-grey font-">{day.summary}</p>
+        <span className="flex items-center gap-1.5">
+          <UmbrelaIcon className="size-4 shrink-0 text-teal" />
+          <p className="text-sm text-nice-grey">{day.summary}</p>
         </span>
-        <div className="border-b border-dashed border-line my-4 ml-7 w-80"></div>
+        <div className="my-4 border-b border-dashed border-line" />
       </div>
 
-      <div className="flex flex-col justify-center items-center">
-        {daySchedules.map((item) => (
+      <div className="flex flex-col gap-3">
+        {daySchedules.map((item, index) => (
           <ScheduleCard
             key={item._id}
             schedule={item}
             selectedPlaceId={selectedPlaceId}
             onSelectPlace={onSelectPlace}
+            // efeito "cascata": cada card entra 60ms depois do anterior
+            style={{ animationDelay: `${(index + 1) * 60}ms` }}
           />
         ))}
       </div>
