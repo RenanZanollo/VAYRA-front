@@ -12,12 +12,20 @@
   --color-teal: #006877;
   --color-day-sidebar-bg: #fdf2e6;
   --color-add-button-border: #71787d;
-  --color-nice-grey: #41484D;
-  --color-blue-tag: #C3E8FF;
+  --color-nice-grey: #41484d;
+  --color-blue-tag: #c3e8ff;
 
   --font-sans: "Roboto", ui-sans-serif, system-ui, sans-serif;
   --font-hand: "Caveat", cursive;
   --font-display: "Fredericka the Great", serif;
   --font-title: "Epilogue";
   --font-jakarta: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

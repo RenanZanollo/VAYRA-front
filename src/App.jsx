@@ -1,4 +1,5 @@
 import Header from "./components/Header.jsx";
+import { PlaceGallery } from "./components/PlaceGallery.jsx";
 import { DaySidebar } from "./components/DaySidebar.jsx";
 import { useState } from "react";
 import { tripDays } from "./data/tripDays.js";
@@ -10,6 +11,7 @@ import { places } from "./data/places.js";
 function App() {
   const [selectedDate, setSelectedDate] = useState(tripDays[0].date);
   const [selectedPlaceId, setSelectedPlaceId] = useState(null);
+  const selectedPlace = places.find((place) => place._id === selectedPlaceId);
 
   return (
     <div className="flex h-dvh flex-col bg-sand overflow-hidden">
@@ -33,7 +35,9 @@ function App() {
         </section>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <section className="h-56 shrink-0 bg-blue-100"></section>
+          <section className="h-56 shrink-0 border-b border-line">
+            <PlaceGallery place={selectedPlace} />
+          </section>
           <section className="min-h-0 flex-1">
             <TripMap
               places={places}

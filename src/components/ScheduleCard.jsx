@@ -12,7 +12,7 @@ export const ScheduleCard = ({ schedule, selectedPlaceId, onSelectPlace }) => {
         <p className="pl-4 font-jakarta text-sm">{schedule.description}</p>
 
       {schedule.placeName && (
-        <div className="ml-4 mt-4 flex font-jakarta">
+        <div className="ml-4 pb-1 mt-1 flex font-jakarta">
           <PlaceChip
             name={schedule.placeName}
             placeId={schedule.place}
