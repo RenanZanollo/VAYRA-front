@@ -44,18 +44,19 @@ export const PlaceGallery = ({ place }) => {
   }
 
   return (
-    <div className="flex h-full flex-col gap-3 p-4">
-      <div className="flex items-center justify-between">
-        <h2 className="flex items-center gap-2 font-jakarta text-xs font-bold tracking-wide text-ocean uppercase">
-          <PinIcon className="size-3.5 text-brand" />
-          Galeria do local selecionado:
-          <span className="rounded-md bg-sand-dark px-2 py-0.5 tracking-normal normal-case">
+    <div className="flex h-full flex-col gap-3 p-3 lg:p-4">
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="flex min-w-0 items-center gap-2 font-jakarta text-xs font-bold tracking-wide text-ocean uppercase">
+          <PinIcon className="size-3.5 shrink-0 text-brand" />
+          {/* rótulo longo só aparece de md pra cima; no celular fica só o nome do lugar */}
+          <span className="hidden whitespace-nowrap md:inline">Galeria do local selecionado:</span>
+          <span className="truncate rounded-md bg-sand-dark px-2 py-0.5 tracking-normal normal-case">
             {place.name}
           </span>
         </h2>
 
-        <div className="flex items-center gap-2 text-xs text-nice-grey">
-          <span className="mr-1">{place.photos.length} fotos</span>
+        <div className="flex shrink-0 items-center gap-2 text-xs text-nice-grey">
+          <span className="mr-1 whitespace-nowrap">{place.photos.length} fotos</span>
           <button type="button" onClick={() => scroll(-1)} aria-label="Fotos anteriores" className={arrowClass}>
             ‹
           </button>
@@ -75,7 +76,7 @@ export const PlaceGallery = ({ place }) => {
           <figure
             key={photo.url}
             style={{ animationDelay: `${index * 50}ms` }}
-            className="group relative h-full w-56 shrink-0 animate-fade-up snap-start overflow-hidden rounded-xl bg-sand-dark shadow-card"
+            className="group relative h-full w-44 shrink-0 lg:w-56 animate-fade-up snap-start overflow-hidden rounded-xl bg-sand-dark shadow-card"
           >
             <img
               src={photo.url}

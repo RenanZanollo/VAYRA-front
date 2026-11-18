@@ -6,42 +6,53 @@ import { tripDays } from "./data/tripDays.js";
 import { AddItemButton } from "./components/AddItemButton.jsx";
 import { AgendaPanel } from "./components/AgendaPanel.jsx";
 import { TripMap } from "./components/TripMap.jsx";
+import { BottomNav } from "./components/BottomNav.jsx";
 import { places } from "./data/places.js";
 
 function App() {
   const [selectedDate, setSelectedDate] = useState(tripDays[0].date);
   const [selectedPlaceId, setSelectedPlaceId] = useState(null);
+  // Qual aba aparece no celular: "agenda" ou "map". No desktop é ignorado (as duas aparecem).
+  const [mobileView, setMobileView] = useState("agenda");
   const selectedPlace = places.find((place) => place._id === selectedPlaceId);
+
+  // Clicar num lugar da agenda seleciona E leva pra aba do mapa.
+  // No desktop trocar mobileView não muda nada na tela (o lg:flex sempre mostra o mapa).
+  const handleSelectPlace = (placeId) => {
+    setSelectedPlaceId(placeId);
+    setMobileView("map");
+  };
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-sand">
       <Header />
 
-      <main className="flex min-h-0 flex-1">
+      {/* Celular: tudo empilhado (coluna). Desktop: lado a lado (linha). */}
+      <main className="flex min-h-0 flex-1 flex-col lg:flex-row">
         <DaySidebar selectedDate={selectedDate} onSelectDate={setSelectedDate} />
 
-        <section className="flex w-94 shrink-0 flex-col border-r border-line/60">
+        {/* Agenda: no celular só aparece na aba "agenda"; no desktop sempre (lg:flex) */}
+        <section
+          className={`${mobileView === "agenda" ? "flex" : "hidden"} min-h-0 flex-1 flex-col lg:flex lg:w-94 lg:flex-none lg:shrink-0 lg:border-r lg:border-line/60`}
+        >
           <AgendaPanel
             selectedDate={selectedDate}
             selectedPlaceId={selectedPlaceId}
-            onSelectPlace={setSelectedPlaceId}
+            onSelectPlace={handleSelectPlace}
           />
-          <div className="h-18 shrink-0 border-t border-line/60 bg-day-sidebar-bg/70 p-3">
+          <div className="h-16 shrink-0 border-t border-line/60 bg-day-sidebar-bg/70 p-3 lg:h-18">
             <AddItemButton />
           </div>
         </section>
 
-        <div className="flex min-w-0 flex-1 flex-col">
-          <section className="h-56 shrink-0">
+        {/* Galeria + mapa: no celular só na aba "map"; no desktop sempre */}
+        <div
+          className={`${mobileView === "map" ? "flex" : "hidden"} min-h-0 min-w-0 flex-1 flex-col lg:flex`}
+        >
+          <section className="h-44 shrink-0 lg:h-56">
             <PlaceGallery place={selectedPlace} />
           </section>
-
-          {/*
-            Borda com gradiente: o <section> de fora É o gradiente, e o padding
-            de 3px dele vira a "espessura da borda". O <div> de dentro guarda o
-            mapa, com raio um pouco menor (16px - 3px = 13px) pra curva casar.
-          */}
-          <section className="mx-4 mb-4 min-h-0 flex-1 rounded-2xl bg-linear-to-br from-brand to-sunset p-0.75 shadow-lift">
+          <section className="mx-3 mb-3 min-h-0 flex-1 rounded-2xl bg-linear-to-br from-brand to-sunset p-0.75 shadow-lift lg:mx-4 lg:mb-4">
             <div className="h-full overflow-hidden rounded-[13px]">
               <TripMap
                 places={places}
@@ -52,6 +63,8 @@ function App() {
           </section>
         </div>
       </main>
+
+      <BottomNav view={mobileView} onChangeView={setMobileView} />
     </div>
   );
 }

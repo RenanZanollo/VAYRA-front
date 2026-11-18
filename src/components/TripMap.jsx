@@ -28,9 +28,28 @@ const FlyToSelected = ({ place }) => {
 
   useEffect(() => {
     if (place) {
+      // No celular, o mapa pode ter acabado de aparecer (estava display:none).
+      // Recalcula o tamanho ANTES de voar, senão ele centraliza errado.
+      map.invalidateSize();
       map.flyTo([place.lat, place.lng], 15, { duration: 1.2 });
     }
   }, [place, map]);
+
+  return null;
+};
+
+// "Vigia" o tamanho do mapa. Quando ele muda (ex.: aba Mapa abriu no celular,
+// saiu de 0x0 pra tela cheia), avisa o Leaflet pra recalcular e carregar os tiles.
+const ResizeWatcher = () => {
+  const map = useMap();
+
+  useEffect(() => {
+    const observer = new ResizeObserver(() => map.invalidateSize());
+    observer.observe(map.getContainer());
+
+    // limpeza: para de vigiar quando o componente sai da tela
+    return () => observer.disconnect();
+  }, [map]);
 
   return null;
 };
@@ -64,6 +83,7 @@ export const TripMap = ({ places, selectedPlaceId, onSelectPlace }) => {
       })}
 
       <FlyToSelected place={selectedPlace} />
+      <ResizeWatcher />
     </MapContainer>
   );
 };
