@@ -3,7 +3,6 @@ import { MapContainer, TileLayer, Marker, Tooltip, useMap } from "react-leaflet"
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// Pin normal: cresce um pouco no hover
 const pinIcon = L.divIcon({
   className: "",
   html: '<div class="size-4 rounded-full border-2 border-white bg-brand shadow-md transition-transform duration-200 hover:scale-125"></div>',
@@ -11,12 +10,12 @@ const pinIcon = L.divIcon({
   iconAnchor: [8, 8],
 });
 
-// Pin selecionado: gradiente + uma "onda" pulsando atrás (animate-ping)
 const selectedPinIcon = L.divIcon({
   className: "",
   html: `
     <div class="relative size-7">
-      <span class="absolute inset-0 animate-ping rounded-full bg-brand/40"></span>
+      <span class="pointer-events-none absolute inset-0 animate-pin-pulse rounded-full bg-brand"></span>
+      <span class="pointer-events-none absolute inset-0 animate-pin-pulse rounded-full bg-brand [animation-delay:1s]"></span>
       <div class="relative size-7 rounded-full border-4 border-white bg-linear-to-br from-brand to-sunset shadow-lg"></div>
     </div>`,
   iconSize: [28, 28],
@@ -28,8 +27,6 @@ const FlyToSelected = ({ place }) => {
 
   useEffect(() => {
     if (place) {
-      // No celular, o mapa pode ter acabado de aparecer (estava display:none).
-      // Recalcula o tamanho ANTES de voar, senão ele centraliza errado.
       map.invalidateSize();
       map.flyTo([place.lat, place.lng], 15, { duration: 1.2 });
     }
@@ -38,8 +35,6 @@ const FlyToSelected = ({ place }) => {
   return null;
 };
 
-// "Vigia" o tamanho do mapa. Quando ele muda (ex.: aba Mapa abriu no celular,
-// saiu de 0x0 pra tela cheia), avisa o Leaflet pra recalcular e carregar os tiles.
 const ResizeWatcher = () => {
   const map = useMap();
 
@@ -47,7 +42,6 @@ const ResizeWatcher = () => {
     const observer = new ResizeObserver(() => map.invalidateSize());
     observer.observe(map.getContainer());
 
-    // limpeza: para de vigiar quando o componente sai da tela
     return () => observer.disconnect();
   }, [map]);
 

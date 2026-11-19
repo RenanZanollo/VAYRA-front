@@ -8,7 +8,6 @@ const Header = () => {
           <SunIcon className="size-5 text-white lg:size-6" />
         </div>
 
-        {/* min-w-0 + truncate: se não couber, corta com "..." em vez de quebrar linha */}
         <div className="min-w-0">
           <h1 className="truncate font-title text-lg leading-6 font-bold tracking-tight text-ocean lg:text-xl">
             Roteiro Fim de Ano
@@ -18,7 +17,6 @@ const Header = () => {
       </div>
 
       <div className="flex shrink-0 items-center gap-3 font-jakarta text-sm font-semibold">
-        {/* Chip de datas: só a partir de md (tablet). No celular, o próprio dia selecionado já mostra a data */}
         <span className="hidden h-8 items-center gap-2 rounded-full border border-line/70 bg-white/70 px-3 text-ocean shadow-soft md:flex">
           <CalendarIcon className="size-3.5 text-brand" />
           <span>
@@ -26,7 +24,6 @@ const Header = () => {
           </span>
         </span>
 
-        {/* Clima: no celular vira só "30°C"; o texto completo aparece de md pra cima */}
         <span className="flex h-8 items-center gap-1.5 rounded-full border border-sky-line/70 bg-sky/60 px-2.5 text-ink shadow-soft lg:gap-2 lg:px-3">
           <SunIcon className="size-4 text-teal" />
           30°C

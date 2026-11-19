@@ -1,7 +1,6 @@
 import { formatDayLabel, tripDays } from "../data/tripDays.js";
 import { DayTab } from "./DayTab.jsx";
 
-
 export const DaySidebar = ({ selectedDate, onSelectDate }) => {
   return (
     <aside className="no-scrollbar flex shrink-0 flex-row gap-1 overflow-x-auto border-b border-line/60 bg-day-sidebar-bg px-2 py-2 lg:w-24 lg:flex-col lg:gap-0 lg:overflow-x-visible lg:overflow-y-auto lg:border-r lg:border-b-0 lg:px-0 lg:py-0">

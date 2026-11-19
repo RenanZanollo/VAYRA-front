@@ -11,20 +11,10 @@ const inputClass =
 
 const EMPTY_FORM = { time: "", title: "", description: "", placeName: "", place: null };
 
-/*
-  Um modal só pra CRIAR e EDITAR: o formulário é o mesmo, muda o ponto de partida.
-  - item = undefined -> criando: começa vazio, salva no dia selecionado
-  - item = {...}     -> editando: começa com os dados do card
-
-  O App só renderiza este componente quando o modal deve aparecer,
-  então cada abertura nasce com o state novinho.
-*/
 export const ItemDialog = ({ item, date, places, onSave, onClose }) => {
   const dialogRef = useRef(null);
   const isEditing = item !== undefined;
 
-  // Um único objeto de state pro formulário inteiro (campos "controlados").
-  // useState só usa o valor inicial na PRIMEIRA renderização: copia o item uma vez.
   const [form, setForm] = useState(() =>
     isEditing
       ? {
@@ -39,24 +29,19 @@ export const ItemDialog = ({ item, date, places, onSave, onClose }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
 
-  // Atualiza só um campo, mantendo os outros (...current copia o resto)
   const updateField = (field) => (event) =>
     setForm((current) => ({ ...current, [field]: event.target.value }));
 
-  // showModal() é o que transforma o <dialog> em modal de verdade
-  // (fundo escuro, Esc fecha, foco preso dentro dele).
   useEffect(() => {
     dialogRef.current.showModal();
   }, []);
 
   const handleSubmit = async (event) => {
-    event.preventDefault(); // não recarregar a página
+    event.preventDefault();
     setIsSaving(true);
     setError(null);
 
     try {
-      // onSave manda pra API (POST ou PUT). O await espera o banco confirmar.
-      // Editando, mandamos o _id junto pro App saber qual item atualizar.
       await onSave({
         ...(isEditing && { _id: item._id }),
         date: isEditing ? item.date : date,
@@ -66,10 +51,8 @@ export const ItemDialog = ({ item, date, places, onSave, onClose }) => {
         placeName: form.placeName.trim(),
         place: form.place,
       });
-      dialogRef.current.close(); // só fecha se deu certo
+      dialogRef.current.close();
     } catch (err) {
-      // Deu erro (back recusou ou está fora do ar): mostra a mensagem e
-      // mantém o modal aberto com tudo que foi digitado.
       setError(err.message);
       setIsSaving(false);
     }
@@ -78,9 +61,7 @@ export const ItemDialog = ({ item, date, places, onSave, onClose }) => {
   return (
     <dialog
       ref={dialogRef}
-      // Esc ou dialog.close() disparam "close": avisamos o App pra desmontar
       onClose={onClose}
-      // Clique fora (no fundo escuro) fecha: o alvo do clique é o próprio <dialog>
       onClick={(event) => event.target === dialogRef.current && !isSaving && dialogRef.current.close()}
       className="m-auto w-[min(100%-2rem,28rem)] animate-fade-up rounded-2xl bg-sand p-0 shadow-lift backdrop:bg-ink/40 backdrop:backdrop-blur-sm"
     >
@@ -94,7 +75,6 @@ export const ItemDialog = ({ item, date, places, onSave, onClose }) => {
           </h2>
         </div>
 
-        {/* fieldset disabled desativa TODOS os campos de uma vez enquanto salva */}
         <fieldset disabled={isSaving} className="flex flex-col gap-4 disabled:opacity-60">
           <div className="flex gap-3">
             <div className="w-28 shrink-0">
@@ -120,7 +100,6 @@ export const ItemDialog = ({ item, date, places, onSave, onClose }) => {
           <div>
             <div className="flex items-baseline justify-between">
               <label htmlFor="item-description" className={labelClass}>Descrição</label>
-              {/* contador de caracteres: fica vermelho perto do limite */}
               <span className={`text-[11px] ${form.description.length > DESCRIPTION_MAX - 15 ? "text-brand" : "text-nice-grey/50"}`}>
                 {form.description.length}/{DESCRIPTION_MAX}
               </span>

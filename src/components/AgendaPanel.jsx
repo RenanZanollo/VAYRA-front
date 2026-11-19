@@ -3,7 +3,6 @@ import { formatLongDate, tripDays } from "../data/tripDays.js";
 import { UmbrelaIcon } from "./icons.jsx";
 import { ScheduleCard } from "./ScheduleCard.jsx";
 
-// "Esqueleto" que aparece enquanto os dados carregam (no lugar dos cards)
 const CardSkeleton = () => (
   <div className="flex animate-pulse flex-col gap-2 rounded-xl border border-line/50 bg-white p-4">
     <div className="h-5 w-14 rounded-md bg-sand-dark" />
@@ -24,15 +23,11 @@ export const AgendaPanel = ({
 }) => {
   const day = tripDays.find((tripDay) => tripDay.date === selectedDate);
 
-  // Filtra o dia e ordena por horário ("08:30" < "12:00" funciona comparando texto,
-  // porque o formato HH:mm sempre tem 2 dígitos). Um item novo entra no lugar certo.
   const daySchedules = schedules
     .filter((item) => item.date === selectedDate)
     .sort((a, b) => a.time.localeCompare(b.time));
 
   return (
-    // key={selectedDate}: quando o dia muda, o React recria este bloco
-    // e as animações de entrada rodam de novo.
     <div key={selectedDate} className="min-h-0 flex-1 overflow-y-auto px-4 pb-4">
       <div className="animate-fade-up pt-6">
         <p className="font-hand text-3xl font-bold text-brand first-letter:uppercase">
@@ -86,7 +81,6 @@ export const AgendaPanel = ({
               onSelectPlace={onSelectPlace}
               onEdit={() => onEditItem(item)}
               onDelete={() => onDeleteItem(item._id)}
-              // efeito "cascata": cada card entra 60ms depois do anterior
               style={{ animationDelay: `${(index + 1) * 60}ms` }}
             />
           ))}

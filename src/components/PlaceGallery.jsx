@@ -48,7 +48,6 @@ export const PlaceGallery = ({ place }) => {
       <div className="flex items-center justify-between gap-2">
         <h2 className="flex min-w-0 items-center gap-2 font-jakarta text-xs font-bold tracking-wide text-ocean uppercase">
           <PinIcon className="size-3.5 shrink-0 text-brand" />
-          {/* rótulo longo só aparece de md pra cima; no celular fica só o nome do lugar */}
           <span className="hidden whitespace-nowrap md:inline">Galeria do local selecionado:</span>
           <span className="truncate rounded-md bg-sand-dark px-2 py-0.5 tracking-normal normal-case">
             {place.name}
@@ -66,7 +65,6 @@ export const PlaceGallery = ({ place }) => {
         </div>
       </div>
 
-      {/* key={place._id}: ao trocar de lugar, a lista é recriada e anima de novo */}
       <div
         key={place._id}
         ref={scrollerRef}
@@ -84,7 +82,6 @@ export const PlaceGallery = ({ place }) => {
               loading="lazy"
               className="h-full w-full object-cover transition-transform duration-700 ease-smooth group-hover:scale-105"
             />
-            {/* degradê escuro embaixo: a legenda fica legível em qualquer foto */}
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/60 to-transparent" />
             <figcaption className="absolute bottom-2 left-2.5 text-xs font-semibold text-white drop-shadow">
               {photo.caption}
